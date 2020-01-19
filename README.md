@@ -12,4 +12,5 @@ Make sure the clound in the top right is not filled with white!
 In the tab "subscribe" you can watch the state of device. (device is the object that is controlled, light for example)
 In the tab "publish" you can control your device.
 There are two modes: automatic and manual. To use automatic you must set up time of turning off and on. Also you need your button to be on the "automatic mode" selected. To use manual mode you need to click on "mode" section so it will be on "manual" selected and now you can press on "on" and "off" to turn on and off the device. 
+
 You can check if your device is turned. Just press on "check" button and click on "subscribe" tab and you will see the state in section "Check".
