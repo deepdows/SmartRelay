@@ -9,11 +9,11 @@ unsigned long last_time; // variable for delay for automode
 bool flagMode = false; // flag for mode statement
 
 const char* ssid = "...."; //WI-FI name
-const char* password = "........"; //WI-FI password
+const char* password = "....."; //WI-FI password
 
-const char* mqttServer = "......"; // server of MQTT
+const char* mqttServer = "...."; // server of MQTT https://www.cloudmqtt.com
 const int mqttPort = ....; // port of MQTT
-const char* mqttUser = "...."; // user of MQTT
+const char* mqttUser = "....."; // user of MQTT
 const char* mqttPassword = "....."; // password of MQTT
 
 WiFiClient espClient; 
@@ -25,7 +25,11 @@ void callback(char* topic, byte* payload, unsigned int length) {
     str += (char)payload[i];
   }                         // having message
   String t = String(topic); // having topic name
-  if(t == "relay" && flagMode) relay1(str);
+  if(t == "turn") { 
+    if(str == "on"){flagMode = true;relay1("1");}
+    if(str == "off"){flagMode = true;relay1("0");}
+    if(str == "auto")flagMode = false;
+    }
   if(t == "time1") time1(str);
   if(t == "time2") time2(str);
   if(t == "check") { 
@@ -33,7 +37,6 @@ void callback(char* topic, byte* payload, unsigned int length) {
     if (last == "1") client.publish("showcheckrelay","on");
     else client.publish("showcheckrelay","off");
   }
-  if(t == "mode" ){if(str == "1") flagMode = true; else flagMode = false;}
 }
  
 void setup() {
@@ -67,18 +70,15 @@ void setup() {
       delay(2000);
     }
   }
-  client.subscribe("relay");
+  client.subscribe("turn");
   client.subscribe("time1");
   client.subscribe("time2");
-  client.subscribe("mode");
   client.subscribe("check");
 }
  
 void loop() {
   client.loop();
-  if(!flagMode){ 
-  autoMode();
-  }
+  if(!flagMode)autoMode();
 }
 void time1(String str){
   EEPROM.write(0, str.substring(0, 2).toInt());
